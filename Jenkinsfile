@@ -1,6 +1,16 @@
-podTemplate(
-    cloud: 'openshift',
-    name: 'maven'
+podTemplate(yaml: """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins-node: jenkins-node
+spec:
+  containers:
+  - name: maven
+    image: image-registry.openshift-image-registry.svc:5000/openshift/jenkins-agent-maven:latest
+    imagePullPolicy: Always
+    tty: true
+"""
 ) {
   node(POD_LABEL) {
     stage('Get a Maven project') {
