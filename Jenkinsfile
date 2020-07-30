@@ -1,4 +1,7 @@
-podTemplate(name: 'maven') {
+podTemplate(
+    cloud: 'openshift'
+    name: 'maven'
+) {
   node(POD_LABEL) {
     stage('Get a Maven project') {
       git 'https://github.com/LancelotTian/ping_pong'
