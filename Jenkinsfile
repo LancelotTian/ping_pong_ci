@@ -1,5 +1,5 @@
 podTemplate(
-    cloud: 'openshift'
+    cloud: 'openshift',
     name: 'maven'
 ) {
   node(POD_LABEL) {
