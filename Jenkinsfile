@@ -1,27 +1,11 @@
-pipeline {
-    agent {
-    openshift {
-        label 'podlabel'
-        yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  name: jenkins-agent
-spec:
-  containers:
-    - name: jenkins-agent
-    image: registry.redhat.io/openshift4/ose-jenkins-agent-maven
-
-  imagePullSecrets:
-    - name: 12858982-leon--pull-secret
-"""
-   }
+podTemplate(name: 'maven') {
+  node(POD_LABEL) {
+    stage('Get a Maven project') {
+      git 'https://github.com/LancelotTian/ping_pong'
+      container('jnlp') {
+        stage('Build a Maven project') {
+          sh 'mvn -B clean install'
         }
-    stages {
-        stage('Build') {
-            steps {
-                sh 'mvn -B -DskipTests clean package'
-            }
-        }
-    }
+      }
+  }
 }
