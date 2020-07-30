@@ -1,4 +1,6 @@
-podTemplate(yaml: """
+podTemplate(
+    cloud: 'openshift',
+    yaml: """
 apiVersion: v1
 kind: Pod
 metadata:
