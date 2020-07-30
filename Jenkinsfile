@@ -1,6 +1,6 @@
 pipeline {
     agent {
-    kubernetes {
+    openshift {
         label 'podlabel'
         yaml """
 apiVersion: v1
