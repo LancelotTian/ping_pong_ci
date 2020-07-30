@@ -1,7 +1,7 @@
 pipeline {
     agent {
     kubernetes {
-        label podlabel
+        label 'podlabel'
         yaml """
 apiVersion: v1
 kind: Pod
