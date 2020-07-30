@@ -1,8 +1,21 @@
 pipeline {
     agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v /root/.m2:/root/.m2'
+    kubernetes {
+        label podlabel
+        yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jenkins-agent
+spec:
+  containers:
+    - name: jenkins-agent
+    image: registry.redhat.io/openshift4/ose-jenkins-agent-maven
+
+  imagePullSecrets:
+    - name: 12858982-leon--pull-secret
+"""
+   }
         }
     }
     stages {
