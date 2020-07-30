@@ -7,5 +7,6 @@ podTemplate(name: 'maven') {
           sh 'mvn -B clean install'
         }
       }
-  }
+    }
+ }
 }
