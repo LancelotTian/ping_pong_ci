@@ -14,6 +14,7 @@ podTemplate(cloud:'openshift',
         }
         container('sonar') {
             stage('Code analysis') {
+                sh 'sonar-scanner'
             }
         }
     }
