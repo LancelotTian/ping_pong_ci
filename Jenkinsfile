@@ -1,11 +1,23 @@
 podTemplate(
-    cloud: 'openshift',
-    inheritFrom: 'maven'
+    cloud: "openshift",
+    yaml: """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    some-label: some-label-value
+spec:
+  containers:
+  - name: busybox
+    image: docker.io/busybox
+    command:
+    - cat
+    tty: true
+"""
 ) {
-  node(POD_LABEL) {
-    stage('Get a Maven project') {
-      git 'https://github.com/LancelotTian/ping_pong'
-      sh 'mvn -B clean install'
+    node(POD_LABEL) {
+      container('busybox') {
+        sh "hostname"
+      }
     }
- }
 }
