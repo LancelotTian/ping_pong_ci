@@ -21,5 +21,9 @@ podTemplate(cloud:'openshift',
                 sh 'sonar-scanner'
             }
         }
+
+        stage('Docker build'){
+            docker.build("ping-pong:${env.BUILD_ID}")
+        }
     }
 }
