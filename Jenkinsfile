@@ -6,12 +6,16 @@ podTemplate(cloud:'openshift',
     ]
 ){
     node(POD_LABEL) {
-        git 'https://github.com/LancelotTian/ping_pong'
+        stage('Checkout'){
+            git 'https://github.com/LancelotTian/ping_pong'
+        }
+
         container('maven') {
             stage('Compile & Unit Test & Package') {
                 sh 'mvn -B clean install'
             }
         }
+
         container('sonar') {
             stage('Code analysis') {
                 sh 'sonar-scanner'
