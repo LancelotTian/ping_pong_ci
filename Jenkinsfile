@@ -40,7 +40,7 @@ spec:
         container('kaniko'){
             stage('Docker build & Push to registry'){
                 sh 'cat /kaniko/.docker/config.json'
-                sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=quay-default.apps.cluster-beijing-1fdf.beijing-1fdf.example.opentlc.com/quay/ping-pong:$BUILD_ID'
+                sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=quay-default.apps.cluster-beijing-1fdf.beijing-1fdf.example.opentlc.com/leon/ping-pong:$BUILD_ID'
             }
         }
 
