@@ -1,11 +1,30 @@
 podTemplate(cloud:'openshift',
-            containers: [
-        containerTemplate(name: 'maven', image: 'docker.io/maven:3-jdk-8', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'docker', image: 'docker.io/docker:19', command: 'sleep',args: '99d',envVars: [
-            envVar(key: 'DOCKER_HOST', value: 'tcp://localhost:2375')]),
-        containerTemplate(name: 'docker-daemon', image: 'docker.io/docker:19-dind', privileged: true,envVars: [
-            envVar(key: 'DOCKER_TLS_CERTDIR', value: '')])
-    ]
+yaml: """
+kind: Pod
+spec:
+  containers:
+  - name: maven
+    image: docker.io/maven:3-jdk-8
+    command: ['cat']
+    tty: true
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    imagePullPolicy: Always
+    command: ['cat']
+    tty: true
+    volumeMounts:
+    - name: jenkins-docker-cfg
+      mountPath: /kaniko/.docker
+  volumes:
+  - name: jenkins-docker-cfg
+    projected:
+      sources:
+      - secret:
+          name: regcred
+          items:
+          - key: .dockerconfigjson
+            path: config.json
+"""
 ){
     node(POD_LABEL) {
         stage('Checkout'){
@@ -18,10 +37,5 @@ podTemplate(cloud:'openshift',
             }
         }
 
-        container('docker'){
-            stage('Docker build'){
-                docker.build("ping-pong:${env.BUILD_ID}")
-            }
-        }
     }
 }
