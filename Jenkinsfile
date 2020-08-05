@@ -31,9 +31,15 @@ spec:
             git 'https://github.com/LancelotTian/ping_pong'
         }
 
-        container('maven') {
+        container('maven'){
             stage('Compile & Unit Test & Package') {
                 sh 'mvn -B clean install'
+            }
+        }
+
+        container('kaniko'){
+            stage('Docker build & Push to registry'){
+                sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=quay-default.apps.cluster-beijing-1fdf.beijing-1fdf.example.opentlc.com/quay/ping-pong:${env.BUILD_ID}'
             }
         }
 
