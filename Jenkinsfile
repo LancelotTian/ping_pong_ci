@@ -13,8 +13,8 @@ spec:
     command: ['cat']
     tty: true
     volumeMounts:
-    - name: jenkins-docker-cfg
-      mountPath: /kaniko/.docker
+      - name: jenkins-docker-cfg
+        mountPath: /kaniko/.docker
   volumes:
   - name: jenkins-docker-cfg
     projected:
@@ -22,8 +22,8 @@ spec:
       - secret:
           name: regcred
           items:
-          - key: .dockerconfigjson
-            path: config.json
+            - key: .dockerconfigjson
+              path: config.json
 """
 ){
     node(POD_LABEL) {
@@ -39,7 +39,8 @@ spec:
 
         container('kaniko'){
             stage('Docker build & Push to registry'){
-                sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=quay-default.apps.cluster-beijing-1fdf.beijing-1fdf.example.opentlc.com/quay/ping-pong'
+                sh 'cat /kanik/.docker/config.json'
+                sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=quay-default.apps.cluster-beijing-1fdf.beijing-1fdf.example.opentlc.com/quay/ping-pong:$BUILD_ID'
             }
         }
 
