@@ -20,7 +20,7 @@ spec:
     projected:
       sources:
       - secret:
-          name: regcred
+          name: quayio-regcred
           items:
             - key: .dockerconfigjson
               path: config.json
