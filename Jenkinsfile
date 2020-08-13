@@ -43,7 +43,7 @@ spec:
             }
         }
 
-        stage('Run shell') {
+        stage('Update deployment'){
             git credentialsId: 'git-ssh-key', url: 'git@github.com:LancelotTian/ping_pong_gitops.git'
             sh 'sed -i "s/ping-pong:.*$/ping-pong:$BUILD_ID/g" deployment.yaml'
             sh 'git config --global user.email "tianliang1980@gmail.com"'
@@ -52,5 +52,6 @@ spec:
             sshagent(['git-ssh-key']) {
                 sh 'git push --set-upstream origin master'
             }
+        }
     }
 }
